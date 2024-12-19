@@ -11,7 +11,6 @@ const captainSchema = new mongoose.Schema({
     },
     lastname : {
       type : String,
-      minlength : [3 , 'lastname must be at least 3 characters']
     }
   },
   email : {
@@ -24,7 +23,7 @@ const captainSchema = new mongoose.Schema({
     type : String,
     required : true,
     select : false,
-    minlength : [6 , 'password must be at least 8 characters long']
+    minlength : [6 , 'password must be at least 6 characters long']
   },
   socketId : {
     type : String,
@@ -43,7 +42,6 @@ const captainSchema = new mongoose.Schema({
     numberPlate : {
       type : String,
       required : true,
-      unique : true,
       minlength : [8 , 'number plate must be at least 8 characters long']
     },
     capacity : {
@@ -53,7 +51,7 @@ const captainSchema = new mongoose.Schema({
     },
     vehicleType : {
       type : String,
-      enum : ['car', 'bike', 'auto'],
+      enum : ['Car', 'Bike', 'Auto'],
       required : true
     },
 

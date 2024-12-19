@@ -7,17 +7,23 @@ const BlackListTokenModel = require('../models/blacklist.model')
 
 module.exports.registerUser = async function(req,res,next) {
   const errors = validationResult(req)
+
   if (!errors.isEmpty()){
     return res.status(400).json({ errors: errors.array() })
   }
 
+
   const {fullname , email, password} = req.body
+
+  const duplicateEmail = await userModel.findOne({email})
+
+  if(duplicateEmail) return res.status(400).json({ message: 'email already exists' })
 
   const hashPass = await userModel.hashPassword(password)
 
   const user = await userServices.createUser({
     firstname : fullname.firstname,
-    lastname : fullname.lastname,
+    lastname : fullname?.lastname,
     email,
     password: hashPass
   })

@@ -13,6 +13,12 @@ module.exports.registerCaptain = async function (req , res , next) {
 
   const { fullname , email , password , vehicle } = req.body
 
+  const isEmailTaken = await captainModel.findOne({ email })
+
+  if(isEmailTaken) {
+    return res.status(400).json({ message: 'Email is already taken' })
+  }
+
   const hashedPassword = await captainModel.hashPassword(password)
 
   const captain = await captainService.createCaptain({

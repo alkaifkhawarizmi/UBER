@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CaptainContext from '../context/CaptainContext';
 function CaptainSignUp() {
 
+  const {captain , setCaptain} = useContext(CaptainContext)
+
+  const navigate = useNavigate()
   const [email , setEmail] = useState()
-
+  const [fullname , setFullName] = useState({
+    firstname : "",
+    lastname : ""
+  })
   const [password, setPassword] = useState()
-
-  const [userData , setUserData] = useState({})
-
   const [vehicle, setVehicle] = useState({
     color : "",
     numberPlate : "",
@@ -15,9 +22,32 @@ function CaptainSignUp() {
     vehicleType : ""
   })
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
-    setUserData({email , password , vehicle})
+    if(!email || !password || !vehicle.color || !vehicle.numberPlate || !vehicle.capacity || !vehicle.vehicleType){
+      return alert("all fields are required")
+    }
+
+    if(vehicle.numberPlate.length < 8 || password.length < 8){
+      return toast.warn("password and number plate should be at least 8 characters long")
+    }
+
+    const captainData = {fullname , email , password , vehicle}
+
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register` , captainData , {headers: { 'Content-Type': 'application/json' }})
+      if(res.status === 201){
+        localStorage.setItem("token" , JSON.stringify(res.data.token))
+        toast.success("registration successful")
+        setCaptain(res.data)
+        navigate('/captain-home')
+      }
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+      toast.warn("please try again")
+    }
+
     setEmail('')
     setPassword('')
     setVehicle({
@@ -28,7 +58,6 @@ function CaptainSignUp() {
     })
   }
 
-
   return (
     <div>
       <div className='p-7 flex flex-col justify-between h-screen'>
@@ -37,8 +66,8 @@ function CaptainSignUp() {
       <form onSubmit={(e) => submitHandler(e)}>
       <h3 className='text-xl font-medium mb-2'>What's Your Full Name</h3>
      <div className='flex justify-between'>
-     <input onChange={(e) => setEmail(e.target.value)} className='bg-gray-200 mb-7 rounded px-4 py-2 border w-1/2 text-lg placeholder:text-base' required type="text" placeholder='first name' />
-     <input onChange={(e) => setEmail(e.target.value)} className='bg-gray-200 mb-7 rounded px-4 py-2 border w-2/5 text-lg placeholder:text-base' required type="text" placeholder='last name' />
+     <input value={fullname.firstname} onChange={(e) => setFullName((prev) =>  ({...prev , firstname : e.target.value}))} className='bg-gray-200 mb-7 rounded px-4 py-2 border w-1/2 text-lg placeholder:text-base' required type="text" placeholder='first name' />
+     <input value={fullname.lastname} onChange={(e) => setFullName((prev) =>  ({...prev , lastname : e.target.value}))} className='bg-gray-200 mb-7 rounded px-4 py-2 border w-2/5 text-lg placeholder:text-base'  type="text" placeholder='last name' />
      </div>
         <h3 className='text-xl font-medium mb-2'>What's Your Email</h3>
         <input onChange={(e) => setEmail(e.target.value)} className='bg-gray-200 mb-7 rounded px-4 py-2 border w-full text-lg placeholder:text-base' required type="email" placeholder='email@example.com' />
