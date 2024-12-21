@@ -1,13 +1,21 @@
 import React from 'react'
-import { RiUserLocationFill } from "react-icons/ri";
-import { FaLocationDot } from "react-icons/fa6";
-import { IoMdCash } from "react-icons/io";
+import { FaLocationDot } from 'react-icons/fa6'
+import { IoMdCash } from 'react-icons/io'
+import { RiUserLocationFill } from 'react-icons/ri'
+import { Typewriter } from "react-simple-typewriter";
 
-function ConfirmRide(props) {
+function LookingForDriver() {
   return (
-    <div>
-      <div>
-        <h1 className='text-3xl font-semibold'>Confirm Your Ride</h1>
+    <div> 
+        <h1 className='text-3xl text-center font-semibold'>Looking for Captains  <Typewriter
+            words={["....."]}
+            loop={0} // Set loop={false} for a single loop
+            cursor
+            cursorStyle=""
+            typeSpeed={200}
+            deleteSpeed={200}
+            delaySpeed={1000}
+          /></h1>
         <img src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1670427549/assets/c4/c2552a-2317-4b9e-becf-ed7b96459edd/original/UberBlack-1.jpg" alt="" />
         <div className='flex mt-2 items-center gap-6 border-gray-400 border-b-2 pb-4'>
           <h1 className='text-3xl'>
@@ -39,10 +47,8 @@ function ConfirmRide(props) {
           <p className='text-gray-600 text-xl'>Payment mode , Cash</p>
           </div>
         </div>
-        <button onClick={() => props.setConfirmedRide(true)} className='w-full bg-green-600 py-3 mt-4 text-xl font-bold text-white rounded-xl'>Confirm</button>
       </div>
-    </div>
   )
 }
 
-export default ConfirmRide
+export default LookingForDriver

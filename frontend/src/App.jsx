@@ -11,6 +11,7 @@ import { UserProvider } from './context/UserContext'
 import LogOut from './pages/LogOut'
 import { CaptainProvider } from './context/CaptainContext'
 import CaptainHome from './CaptainHome'
+import Riding from './Riding'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/login' element={<UserLogin/>} />
         <Route path='/signup' element={<UserSignUp/>} />
         <Route path='/home' element={<HomePage/>} />
+        <Route path='/riding' element={<Riding/>}/>
         <Route path='/logout' element={<LogOut/>} />
         <Route path='/captain-login' element={<CaptainLogin/>} />
         <Route path='/captain-signup' element={<CaptainSignUp/>} />

@@ -8,17 +8,23 @@ import { IoIosArrowDown } from "react-icons/io";
 import LocationSearchPanel from "./LocationSearchPanel";
 import { FaUser } from "react-icons/fa";
 import ConfirmRide from "./ConfirmRide";
+import LookingForDriver from "./LookingForDriver";
+import WaitingForCaptain from "./WaitingForCaptain";
 
 function HomePage() {
 
   const panelRef = useRef(null)
   const ConfirmRideRef = useRef(null)
+  const ConfirmedRideRef = useRef(null)
+  const CaptainFound = useRef(null)
   const { user, setUser } = useContext(UserContext);
   const [pickUp , setPickUp] = useState('')
   const [dropOff, setDropOff] = useState('')
   const [panel, setpanel] = useState(false)
   const [vehiclePanel , setvehiclePanel] = useState(false)
   const [confirmPanel , setConfirmPanel] = useState(false)
+  const [confirmedRide , setConfirmedRide] = useState(false)
+  const [CaptainFind , setCaptainFind] = useState(false)
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token"));
 
@@ -78,6 +84,34 @@ function HomePage() {
       })
     }
   },[confirmPanel])
+
+  useGSAP(() => {
+    if(confirmedRide){
+      gsap.to(ConfirmedRideRef.current,{
+        height : "70%",
+        opacity : '1'
+      })
+    } else {
+      gsap.to(ConfirmedRideRef.current,{
+        height : "0%",
+        opacity:'0'
+      })
+    }
+  },[confirmedRide])
+
+  useGSAP(() => {
+    if(CaptainFind){
+      gsap.to(CaptainFound.current,{
+        height : "70%",
+        opacity : '1'
+      })
+    } else {
+      gsap.to(CaptainFound.current,{
+        height : "0%",
+        opacity:'0'
+      })
+    }
+  },[CaptainFind])
 
   return (
     <div className="relative h-screen overflow-hidden">
@@ -157,7 +191,14 @@ function HomePage() {
             </div>
         </div>
         <div ref={ConfirmRideRef} className={`h-1/2 absolute z-20 bottom-0 w-full bg-white p-5`}>
-          <ConfirmRide />
+          <ConfirmRide setConfirmedRide={setConfirmedRide} />
+        </div>
+        <div ref={ConfirmedRideRef} className={`h-1/2 absolute z-20 bottom-0 w-full bg-white p-5`}>
+        <button onClick={() => setCaptainFind(true)}>Captain Found</button>
+          <LookingForDriver />
+        </div>
+        <div ref={CaptainFound} className={`h-1/2 absolute z-20 bottom-0 w-full bg-white p-5 mb-4`}>
+          <WaitingForCaptain />
         </div>
     </div>
   );
